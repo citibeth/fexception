@@ -6,7 +6,9 @@
 #include <string>
 #include <vector>
 #include <memory>
+#ifdef THREAD_SAFE
 #include <boost/thread/tss.hpp>
+#endif
 
 #include "fexception_c.hpp"
 
