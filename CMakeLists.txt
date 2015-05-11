@@ -4,7 +4,7 @@ enable_language(Fortran)
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 include (setup_rpath)
 
-# ------- Process Compile Options
+# ------- Process Configure Options
 if (NOT DEFINED THREAD_SAFE)
 	set(THREAD_SAFE NO)
 endif()
