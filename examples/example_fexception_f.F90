@@ -53,6 +53,12 @@ subroutine main()
 		print *, 'try threw:', exception%code
 	end if
 
+	api%val = 17
+	if (try(c_funloc(sample_fn), c_loc(api), exception)) then
+		f_str = c_f_string(exception%c_msg)
+		print *, 'try threw:', exception%code
+	end if
+
 
 end subroutine main
 

@@ -25,7 +25,7 @@ PyObject *fexception_py_try(PyObject *self, PyObject *args)
 
 	if (!PyArg_ParseTuple(args, "O", &lambda)) return NULL;
 	FException const *exp = fexception_try(my_call_obj, (void *)lambda);
-	if (!exp) return self;
+	if (!exp) return Py_None;
 
 	// We had an exception.  Now throw it Python-style
 	PyErr_SetString(FException_py, exp->msg);
@@ -40,10 +40,10 @@ PyObject *fexception_py_throw(PyObject *self, PyObject *args)
 
 	if (!PyArg_ParseTuple(args, "si", &msg, &code)) return NULL;
 
-	printf("BEGIN throw()\n");
+//	printf("BEGIN throw()\n");
 	fexception_throw(msg, -1, code);
-	printf("END throw()\n");
-	return self;
+//	printf("END throw()\n");
+	return Py_None;
 }
 
 extern "C"
@@ -51,26 +51,26 @@ PyObject *fexception_py_rethrow(PyObject *self, PyObject *args)
 {
 	if (!PyArg_ParseTuple(args, "")) return NULL;
 
-	printf("BEGIN rethrow()\n");
+//	printf("BEGIN rethrow()\n");
 	fexception_rethrow();
-	printf("END rethrow()\n");
-	return self;
+//	printf("END rethrow()\n");
+	return Py_None;
 }
 
 
 static PyMethodDef fexceptionMethods[] = {
-	{"fexec", fexception_py_try, METH_VARARGS, "Execute a lambda and catch exceptions."},
+	{"ftry", fexception_py_try, METH_VARARGS, "Execute a lambda and catch exceptions."},
 	{"fthrow", fexception_py_throw, METH_VARARGS, ""},
 	{"frethrow", fexception_py_rethrow, METH_VARARGS, ""},
 	{NULL, NULL, 0, NULL}
 };
 
 extern "C"
-PyObject *initfexception(void)
+PyObject *init_fexception(void)
 {
 	PyObject* mod;
-	mod = Py_InitModule3("fexception", fexceptionMethods, "Fortran Exceptions Module");
-	FException_py = PyErr_NewException((char *)"fexception.FException", NULL, NULL);
+	mod = Py_InitModule3("_fexception", fexceptionMethods, "Fortran Exceptions Module");
+	FException_py = PyErr_NewException((char *)"_fexception.FException", NULL, NULL);
 	return mod;
 }
 

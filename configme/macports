@@ -1,0 +1,34 @@
+#!/bin/sh
+
+MACPORTS=$HOME/macports
+
+#export BOOST_INCLUDEDIR=$BOOST_ROOT/include
+#export BOOST_LIBRARYDIR=$BOOST_ROOT/lib
+
+#	-DBOOST_ROOT=$HOME/opt/boost-1.55.0 \
+
+
+#PYTHON_ROOT=`python-config --prefix`
+
+
+#PYTHON_LIBRARY             - path to the python library
+#PYTHON_INCLUDE_DIR   
+
+cmake \
+	-DCMAKE_CXX_COMPILER=g++ \
+	-DCMAKE_C_COMPILER=gcc \
+	-DCMAKE_Fortran_COMPILER=gfortran \
+	-DCMAKE_INSTALL_PREFIX:PATH=$HOME/opt/fexception \
+	-DPY_SYSCONFIG_SCHEME=posix_user \
+	-DPYTHON_EXECUTABLE=`which python` \
+	-DTHREAD_SAFE=YES \
+	$@
+
+#	-DPY_SYSCONFIG_USERBASE=/hhhhhhhhhhh \
+
+# Or set custom Python install scheme...
+#	-DPY_SYSCONFIG_STDLIB=/hhhhhhhhhhhhhhhhhhh/17 \
+
+# -DWITH_GLINT2
+#	-DPYTHON_INCLUDES=`python-config --includes` \
+#	-DPYTHON_LIBS=`python-conifg --libs` \
