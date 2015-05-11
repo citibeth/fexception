@@ -82,7 +82,7 @@ contains
 function try(fn, api, exception)
 	type(c_funptr), value :: fn
 	type(c_ptr), value :: api
-	type(logical) :: try
+	logical :: try
 	type(FException), pointer :: exception
 
 	type(c_ptr) :: cexp
