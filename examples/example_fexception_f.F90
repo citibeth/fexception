@@ -13,7 +13,7 @@ contains
 !recursive subroutine sample_fn_c(vapi) bind(C)
 !end subroutine sample_fn_c
 
-recursive subroutine sample_fn(vapi) bind(C)
+recursive subroutine sample_fn(vapi)
 	use iso_c_binding
 	use fexception_mod
 	type(c_ptr), value :: vapi
