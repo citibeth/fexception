@@ -8,18 +8,19 @@ def sample_fn(val):
 		print 'Running sample_fn {}'.format(val)
 
 		try:
-			ftry(lambda: sample_fn(val+1))
+			fexec(lambda: sample_fn(val+1))
 		except Exception as e:
 			frethrow()
 
 
 try:
-	ftry(lambda: sample_fn(5))
+	fexec(lambda: sample_fn(5))
 except Exception as e:
 	print e
 
-try:
-	ftry(lambda: sample_fn(17))
-except Exception as e:
+e = ftry(lambda: sample_fn(17))
+if e:
 	print e
 
+if ftry(lambda: sample_fn(17)):
+	print 'FException caught'

@@ -18,8 +18,32 @@ void my_call_obj(void *api)
 
 PyObject *FException_py;
 
+PyObject *PyTrue;
+PyObject *PyFalse;
+
 extern"C"
 PyObject *fexception_py_try(PyObject *self, PyObject *args)
+{
+	PyObject *lambda;
+
+	if (!PyArg_ParseTuple(args, "O", &lambda)) return NULL;
+	FException const *exp = fexception_try(my_call_obj, (void *)lambda);
+	if (exp) {
+		// We had an exception, return it to the user.
+
+		// Instantiate the object to return (of type FException_py)
+		PyObject *arg_list = Py_BuildValue("si", exp->msg, exp->code);
+		PyObject *pyexp = PyObject_CallObject(FException_py, arg_list);
+		Py_DECREF(arg_list);		// Release the argument list
+
+		return pyexp;
+	} else return Py_None;
+
+	return FException_py;
+}
+
+extern"C"
+PyObject *fexception_py_exec(PyObject *self, PyObject *args)
 {
 	PyObject *lambda;
 
@@ -59,7 +83,8 @@ PyObject *fexception_py_rethrow(PyObject *self, PyObject *args)
 
 
 static PyMethodDef fexceptionMethods[] = {
-	{"ftry", fexception_py_try, METH_VARARGS, "Execute a lambda and catch exceptions."},
+	{"ftry", fexception_py_try, METH_VARARGS, "Execute a lambda and return any FExceptions to the user."},
+	{"fexec", fexception_py_exec, METH_VARARGS, "Execute a lambda and re-throw any FExceptions."},
 	{"fthrow", fexception_py_throw, METH_VARARGS, ""},
 	{"frethrow", fexception_py_rethrow, METH_VARARGS, ""},
 	{NULL, NULL, 0, NULL}
@@ -68,9 +93,10 @@ static PyMethodDef fexceptionMethods[] = {
 extern "C"
 PyObject *init_fexception(void)
 {
-	PyObject* mod;
-	mod = Py_InitModule3("_fexception", fexceptionMethods, "Fortran Exceptions Module");
+	PyObject *mod = Py_InitModule3("_fexception", fexceptionMethods, "Fortran Exceptions Module");
 	FException_py = PyErr_NewException((char *)"_fexception.FException", NULL, NULL);
+	PyTrue = Py_BuildValue("b", true);
+	PyFalse = Py_BuildValue("b", false);
 	return mod;
 }
 
