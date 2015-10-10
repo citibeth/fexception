@@ -3,7 +3,6 @@
 #link_directories (${PROJECT_BINARY_DIR}/slib)
 
 # http://stackoverflow.com/questions/13298504/using-cmake-with-setup-py
-# http://stackoverflow.com/questions/13298504/using-cmake-with-setup-py
 
 message(PYTHON_INCLUDES ${PYTHON_INCLUDES})
 message(PYTHON_LIBRARY ${PYTHON_LIBRARY})
@@ -11,9 +10,15 @@ message(PYTHON_LIBRARY ${PYTHON_LIBRARY})
 include_directories(${PROJECT_SOURCE_DIR}/slib)
 include_directories(${PYTHON_INCLUDES})
 
-ADD_LIBRARY(_fexception MODULE
-	fexception_py.cpp
-)
+if (PYTHON_MAJOR_VERSION MATCHES 2)
+	ADD_LIBRARY(_fexception MODULE
+		fexception_py2.cpp
+	)
+else()
+	ADD_LIBRARY(_fexception MODULE
+		fexception_py3.cpp
+	)
+endif()
 
 #configure_file(${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in ${CMAKE_CURRENT_BINARY_DIR}/setup.py)
 
@@ -39,6 +44,7 @@ set_target_properties(_fexception PROPERTIES
 # NOTE: Some pythons want .../python/site-packages instead of .../python2.7/site-packages
 # In this case, create a symbolic link!
 
+message(STATUS "PY_SYSCONFIG_PLATLIB: ${PY_SYSCONFIG_PLATLIB}")
 install(TARGETS _fexception DESTINATION ${PY_SYSCONFIG_PLATLIB})
 
 install(FILES
