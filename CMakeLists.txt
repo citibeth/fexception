@@ -23,6 +23,8 @@ if(${THREAD_SAFE})
 	find_package(Boost COMPONENTS thread)
 endif()
 
+
+# -------- Process subdirectories of the build
 add_subdirectory(slib)
 add_subdirectory(pyext)
 add_subdirectory(examples)
